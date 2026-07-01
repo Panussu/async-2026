@@ -36,5 +36,5 @@ async def main():
     duration = time() - start_time
     print(f"{ctime()} Finished Entire Restaurant Operation in {duration:.2f} seconds.")
 
-if __name__ == "main":
+if __name__ == "__main__":
     asyncio.run(main())
