@@ -38,11 +38,12 @@ async def main():
 
     for task in done:
         result = task.result()
-        print(f"{ctime()} Winner: {result}")
+        print(f"{ctime()} Winner Result: {result}")
+
+    print(f"{ctime()} Cleaning up {len(pending)} pending tasks...")
 
     for task in pending:
         task.cancel()
-        print(f"{ctime()} Cancelled pending task")
 
     await asyncio.sleep(0)
 
