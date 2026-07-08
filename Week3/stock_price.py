@@ -1,6 +1,5 @@
 import asyncio
 
-
 # นักเรียนต้องเลือกใช้ asyncio.wait() พร้อมออปชั่น return_when=asyncio.FIRST_COMPLETED เท่านั้น
 # หากใครใช้ gather หรือ wait_for จะไม่ตรงสเปคเงื่อนไขการแข่งขันข้อมูล
 
@@ -23,13 +22,12 @@ async def main():
     )
 
     for task in done:
-        print(f"Finished: {task.result()}")
+        print(f"Winner: {task.result()}")
 
     for task in pending:
         task.cancel()
         print("Pending task cancelled.")
 
     await asyncio.sleep(0)
-
 
 asyncio.run(main())

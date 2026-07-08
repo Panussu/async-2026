@@ -1,43 +1,37 @@
 import asyncio
-
-
-# Delivery System: นักศึกษาต้องเขียน try...except CancelledError ได้ถูกต้อง
-# และใช้ .get_name(), .cancel(), และ .cancelled() ได้
+from time import ctime
 
 async def delivery_task(package_id, duration):
     try:
-        print(f"Start delivering package {package_id}...")
+        print(f"{ctime()}Courier Start delivering {package_id}...")
         await asyncio.sleep(duration)
-        print(f"Package {package_id} delivered successfully.")
         return f"Package {package_id} Delivered!"
-
     except asyncio.CancelledError:
-        print("Delivery Canceled! Returning package to warehouse.")
+        print(f"{ctime()}Delivery Canceled! Returning package to warehouse.")
         raise
 
-
 async def main():
-    task = asyncio.create_task(
-        delivery_task("P001", 5.0),
-        name="Express-Courier"
-    )
+    task = asyncio.create_task(delivery_task("P001", 5.0))
+    task.set_name("Express-Courier")
+    
+    print(f"{ctime()}Package is in transit...")
+    await asyncio.sleep(2.0)
 
-    await asyncio.sleep(2)
-
-    print(f"Task name: {task.get_name()}")
-    print(f"Task done?: {task.done()}")
-
+    print(f"{ctime()}Checking task status:")
+    print(f"{ctime()}Is task done? : {task.done()}")
+    print(f"{ctime()}Task Name: {task.get_name()}")
+    
     if not task.done():
-        print("Delivery is taking too long.")
-        print("Canceling delivery task...")
+        print(f"{ctime()}Delivery is taking too long! Canceling task...")
         task.cancel()
+        
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
+        
 
-    try:
-        result = await task
-        print(result)
+        print(f"{ctime()}Is task cancelled? : {task.cancelled()}")
 
-    except asyncio.CancelledError:
-        print(f"Task cancelled?: {task.cancelled()}")
-
-
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
