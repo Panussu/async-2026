@@ -11,7 +11,11 @@ async def fetch_stock_price(server_name: str):
     3. นำข้อมูล JSON (server และ price_usd) มาจัดฟอร์แมตแสดงผล
     """
     url = f"http://127.0.0.1:8088/price/{server_name}"
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> ae4aa50f4d70edf85bcea1a0dac5f7e22b93f9aa
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         response.raise_for_status()
