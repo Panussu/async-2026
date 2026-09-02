@@ -2,9 +2,9 @@ import asyncio
 import redis.asyncio as redis
 
 # ⚙️ CONFIGURATION
-REDIS_HOST = 'localhost'
-GROUP_ID = 'g01'
-STUDENT_ID = '66010002'
+REDIS_HOST = '172.16.46.79'
+GROUP_ID = 'g05'
+STUDENT_ID = '6710301011'
 
 STREAM_KEY = f"f1:telemetry:{GROUP_ID}"
 GROUP_NAME = "f1_pitwall"
@@ -30,9 +30,9 @@ async def pit_strategy_worker():
                     for msg_id, data in msgs:
                         tire_wear = float(data['tire_wear'])
                         
-                        if tire_wear > 75.0:
+                        if tire_wear > 90.0:
                             print(f"🛞 🚨 [PIT STRATEGY] BOX BOX BOX! Tires critical: {tire_wear}% (ID: {msg_id})")
-                        elif tire_wear > 50.0:
+                        elif tire_wear > 75.0:
                             print(f"🛞 ⚠️ [PIT STRATEGY] Prepare Soft Compound. Tires at {tire_wear}%")
 
                         await r.xack(STREAM_KEY, GROUP_NAME, msg_id)

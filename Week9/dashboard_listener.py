@@ -8,7 +8,7 @@ from rich import print as rprint
 
 # ⚙️ CONFIGURATION
 REDIS_HOST = 'localhost'     # IP ของ Redis Server (เครื่องครู หรือ localhost)
-GROUP_ID = 'g01'             # ระบุกลุ่มที่ต้องการดู เช่น g01
+GROUP_ID = 'g6'              # กลุ่ม 6
 TOTAL_DISTANCE_M = 10000.0   # ระยะทางรวม 10 km (10,000 เมตร)
 
 PUBSUB_CHANNEL = f"f1:dashboard:{GROUP_ID}"

@@ -155,9 +155,9 @@ python dashboard_listener.py
 4. **เปิดสคริปต์ประมวลผล Pit Wall (Student 2, 3, 4, 5):**
 ```bash
 # แต่ละคนรันไฟล์ประจำบทบาทของตนเอง
-python student2_pit_strategy.py
-python student3_engine_safety.py
-python student4_drs_controller.py
+python student2_pit_strategy_engineer.py
+python student3_race_control_engine_safety.py
+python student4_DRS_automation_controller.py
 python student5_dashboard_broadcaster.py
 
 ```

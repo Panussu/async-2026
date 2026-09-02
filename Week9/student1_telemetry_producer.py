@@ -5,28 +5,16 @@ import json
 import redis.asyncio as redis
 
 # ⚙️ CONFIGURATION
-REDIS_HOST = 'localhost'     # IP ของ Redis Server (เครื่องครู)
-GROUP_ID = 'g01'             # เลขกลุ่ม เช่น g01 - g08
-STUDENT_ID = '66010001'      # รหัสนักศึกษาตนเอง
+REDIS_HOST = '10.170.62.211'     # IP ของ Redis Server (เครื่องครู)
+GROUP_ID = 'g6'              # กลุ่ม 6
+STUDENT_ID = '6710301008'    # Student 1
 
 STREAM_KEY = f"f1:telemetry:{GROUP_ID}"
 FINISH_DISTANCE = 10000.0    # 10,000 เมตร (10 km)
 
-async def wait_for_new_green_light(r: redis.Redis):
-    """ฟังก์ชันการันตีว่าจะต้องรอครูปดสัญญาณปล่อยตัวรอบใหม่เสมอ"""
+async def wait_for_green_light(r: redis.Redis):
+    """รอจนกว่าศูนย์ควบคุมการแข่งขันจะตั้งสถานะเป็น GREEN"""
     print(f"🏎️ [{GROUP_ID}] Checking Race Status...")
-    
-    # 1. หากสถานะปัจจุบันเป็น GREEN ค้างอยู่ (แข่งจบไปแล้วรอบนึง) ให้รอกระทั่งครู Reset เป็น STOPPED/RED
-    current_status = await r.get("f1:race:status")
-    if current_status == "GREEN":
-        print(f"⏳ [{GROUP_ID}] Waiting for Teacher to RESET the race status (STOPPED)...")
-        while True:
-            status = await r.get("f1:race:status")
-            if status != "GREEN":
-                break
-            await asyncio.sleep(0.5)
-
-    # 2. เมื่อสถานะไม่ใช่ GREEN แล้ว ให้รอกระทั่งครูกดปล่อยตัว (GREEN) รอบใหม่
     print(f"🚦 [{GROUP_ID}] Ready on Grid! Waiting for Teacher's GREEN LIGHT...")
     while True:
         status = await r.get("f1:race:status")
@@ -38,8 +26,8 @@ async def wait_for_new_green_light(r: redis.Redis):
 async def produce_f1_telemetry():
     r = redis.Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
 
-    # 🚦 เรียกใช้ฟังก์ชันรอสัญญาณปล่อยตัวรอบใหม่เสมอ
-    await wait_for_new_green_light(r)
+    # 🚦 รอสัญญาณปล่อยตัวก่อนเริ่มส่ง Telemetry
+    await wait_for_green_light(r)
 
     total_distance_m = 0.0
     dt = 0.05  # ส่งข้อมูลทุก 0.05 วินาที (20 Hz)
